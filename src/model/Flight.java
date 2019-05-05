@@ -10,6 +10,16 @@ package model;
 public class Flight implements Comparable<Flight> {
 	
 	/**
+	 * The next element of the linked list of flights
+	 */
+	private Flight nextFlight;
+	/**
+	 * The previous element of the linked list of flights
+	 */
+	private Flight prevFlight;
+	
+	
+	/**
 	 * represent the airline of the flight
 	 */
 	private String airline;
@@ -154,6 +164,44 @@ public class Flight implements Comparable<Flight> {
 	 */
 	public String getDepartureTime() {
 		return departureTime;
+	}
+	
+	
+	
+	/**
+	 *  <b>Description:</b>
+		* allows to obtain the next flight of the linked list
+	 * @return the nextFlight
+	 */
+	public Flight getNextFlight() {
+		return nextFlight;
+	}
+
+	/**
+	 *  <b>Description:</b>
+		* allows to change the next flight of the linked list
+	 * @param nextFlight the nextFlight to set
+	 */
+	public void setNextFlight(Flight nextFlight) {
+		this.nextFlight = nextFlight;
+	}
+
+	/**
+	 * <b>Description:</b>
+		* allows to obtain the previous flight of the linked list
+	 * @return prevFlight the previous flight
+	 */
+	public Flight getPrevFlight() {
+		return prevFlight;
+	}
+
+	/**
+	 *  <b>Description:</b>
+		* allows to change the previous flight of the linked list
+	 * @param nextFlight the prevFlight to set
+	 */
+	public void setPrevFlight(Flight prevFlight) {
+		this.prevFlight = prevFlight;
 	}
 
 	

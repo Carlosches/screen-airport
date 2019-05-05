@@ -38,7 +38,7 @@ public class AirportScreenThread extends Thread {
 	@Override
 	public void run() {
 	
-			if(criteria.equalsIgnoreCase("airline")) {
+			/*if(criteria.equalsIgnoreCase("airline")) {
 	    		airport.sortingByAirline();
 	    		
 	    	}else if(criteria.equalsIgnoreCase("Default (Date and departure time)")){
@@ -53,13 +53,13 @@ public class AirportScreenThread extends Thread {
 	    	}else if(criteria.equalsIgnoreCase("Gate")){
 	    		airport.sortingByBoardingGate();
 	    		
-	    	}else if(criteria.equals("generate list")) {
+	    	}*/ if(criteria.equals("generate list")) {
 	    		try {
 					airport.generateList(size);
 				} catch (IOException e) {
 					e.printStackTrace();
 				}
-	    		airport.sortingByDateAndTime();
+	    		//airport.sortingByDateAndTime();
 	    	}
 	
 		

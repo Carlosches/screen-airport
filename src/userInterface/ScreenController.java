@@ -12,6 +12,9 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.NoSuchElementException;
 import java.util.StringTokenizer;
+
+import org.omg.CORBA.Current;
+
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
@@ -122,12 +125,12 @@ public class ScreenController {
     /**
      * attribute used to know the paging of the flight list
      */
-    private int lastFlight;
+    private Flight lastFlight;
     
     /**
      * attribute used to know the paging of the flight list
      */
-    private int previousFlight;
+    private Flight previousFlight;
     
     /**
      * stage used to show the flights found in the search option
@@ -199,6 +202,7 @@ public class ScreenController {
 	 */
     @FXML
     void sort(ActionEvent event) {
+    	/*
     	long time = System.currentTimeMillis();
     	if(criteria.getValue() == null) {
     		labelSorting.setText("Choose an option, please");
@@ -230,7 +234,7 @@ public class ScreenController {
     	}	
     	time = System.currentTimeMillis()-time;
     	alertTime(time/1000);
-    	
+    	*/
     }
     
    /**
@@ -260,39 +264,26 @@ public class ScreenController {
 		
 		    	ObservableList<Flight> flights = FXCollections.observableArrayList();
 		    	
-		    	for (int i = 0; i < screen.getFlights().size(); i++) {
-					flights.add(screen.getFlights().get(i));
-				}
-		    
-		   
-		
-		    	screen.getFlights().clear();
-		    	
-		    	AirportScreenThread t = new AirportScreenThread(screen, "generate list", size);
-		    	
-		    	
-		    	t.start();
-		    	try {
-					t.join();
-				} catch (InterruptedException e) {
-					e.printStackTrace();
-				}
-		    	List<Flight> lflights = new ArrayList<Flight>();
 		    	if(size > 13) {
+		    		Flight current = screen.getFirstFlight();
+		    		flights.add(current);
 		    		nextButton.setDisable(false);
-		    		for (int i = 0; i < 13; i++) {
-						lflights.add(screen.getFlights().get(i));
+		    		for (int i = 1; i < 13; i++) {
+		    			current = current.getNextFlight();
+		    			flights.add(current);
 					}
-		    		lastFlight = 13;
+		    		lastFlight = current;
+		    		previousFlight = screen.getFirstFlight();
 		    	}else {
+		    		Flight current = screen.getFirstFlight();
 		    		nextButton.setDisable(true);
 		    		for (int i = 0; i < size; i++) {
-						lflights.add(screen.getFlights().get(i));
+		    			flights.add(current);
+		    			current = current.getNextFlight();
 					}
 		    	}
 	
-		    	ObservableList<Flight> fls = FXCollections.observableArrayList(lflights);
-		    	listFlights.setItems(fls);
+		    	listFlights.setItems(flights);
 			}catch(NumberFormatException e) {
 				labelGenerate.setText("Enter a integer number");
 			}
@@ -306,23 +297,36 @@ public class ScreenController {
      */
     @FXML
     void previousList(ActionEvent event) {
+    	
     	nextButton.setDisable(false);
-    	List<Flight> fli = new ArrayList<Flight>();
     	
     	lastFlight = previousFlight;
-    	previousFlight =  previousFlight-13;
- 
-    	for (int i = previousFlight; i < previousFlight+13 && i<screen.getFlights().size(); i++) {
-    			fli.add(screen.getFlights().get(i));
-    			
-		}
-    
-    	ObservableList<Flight> lf = FXCollections.observableArrayList(fli);
+    	Flight current = previousFlight;
+    	int i = 0;
+    	while( i<12 && current.getPrevFlight() != null) {
+    		current = current.getPrevFlight();
+    		i++;
+    	}
+    	previousFlight = current;
+    	
+    	ObservableList<Flight> lf = FXCollections.observableArrayList();
+    	lf.add(previousFlight);
+    	
+    	current = previousFlight;
+    	 i= 1;
+    	while(current.getNextFlight() != null && i<13) {
+    		current = current.getNextFlight();
+    		lf.add(current);
+    		i++;
+    	}
+    	
+    	
     	listFlights.setItems(lf);
     	
-    	if(previousFlight == 0) {
+    	if(previousFlight == screen.getFirstFlight()) {
     		backButton.setDisable(true);
     	}
+    	
     }
     /**
      * this method allows see the next page of the flights list
@@ -330,23 +334,36 @@ public class ScreenController {
      */
     @FXML
     void nextList(ActionEvent event) {
-    	backButton.setDisable(false);
-    	List<Flight> fli = new ArrayList<Flight>();
     	
+    	backButton.setDisable(false);
+    	
+    	ObservableList<Flight> lf = FXCollections.observableArrayList();
     	int counter = 0;
     	previousFlight = lastFlight;
-    	for (int i = previousFlight; i < previousFlight+13 && i<screen.getFlights().size(); i++) {
-    			fli.add(screen.getFlights().get(i));
-    			counter++;
-		}
+    
+    	Flight current = previousFlight;
+    	int i = 0;
     	
-    	lastFlight += counter;
-    	ObservableList<Flight> lf = FXCollections.observableArrayList(fli);
+    	while(current.getNextFlight()!= null && i < 13){
+    		current = current.getNextFlight();
+    		lf.add(current);
+    		i++;
+    	}
+    	lastFlight = current;
+    	
     	listFlights.setItems(lf);
     	
-    	if(lastFlight == screen.getFlights().size()) {
+
+    	Flight current2 = screen.getFirstFlight();
+    	
+    	while(current2.getNextFlight()!= null){
+    		current2 = current2.getNextFlight();
+    	}
+    
+    	if(lastFlight == current2) {
     		nextButton.setDisable(true);
     	}
+    	
     }
     
     
@@ -357,6 +374,7 @@ public class ScreenController {
      */
     @FXML
     void searchFlight(ActionEvent event) {
+    	/*
     	long time = System.currentTimeMillis();
     	if(search.getValue() == null) {
     		labelSearch.setText("choose an option, please");
@@ -429,13 +447,13 @@ public class ScreenController {
 	    		labelSearch.setText("enter the value correctly");
 	    	}
     	}
-    	
+    	*/
     }
     
     /**
      * this method allows show the time of execution of the a method
      * @param time, the time of the execution
-     */
+     
     public void alertTime(long time) {
     	Alert ale = new Alert(AlertType.INFORMATION);
     	ale.setTitle("Time of excecution");
@@ -448,6 +466,7 @@ public class ScreenController {
     /**
      * this method allows obtain the other stage, used for show the flight found in the search option 
      * @param stage, the other stage
+     
      */
 	public void setStage(Stage stage) {
 		this.stage = stage;

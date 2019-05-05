@@ -22,7 +22,7 @@ public class AirportScreen {
 	/**
 	 * List that represents the flights of the airport
 	 */
-	private List<Flight> flights;
+	private Flight firstFlight;
 	
 	/**
 	 * constant that represents the location of the file airlines
@@ -42,7 +42,7 @@ public class AirportScreen {
 	 */
 	
 	public AirportScreen() {
-		flights = new ArrayList<Flight>();
+		
 	}
 	
 	
@@ -72,6 +72,25 @@ public class AirportScreen {
 		
 		return array;
 	}
+	
+	
+	public void addFlight(Flight newFlight) {
+		
+		if(firstFlight != null) {
+			
+			Flight current = firstFlight;
+			
+			while(current.getNextFlight() != null) {
+				current = current.getNextFlight();
+
+			}
+			
+			current.setNextFlight(newFlight);
+			newFlight.setPrevFlight(current);
+		}else {
+			firstFlight = newFlight;
+		}
+	}
 	/**
 	 * this method is responsible for adding the flights generated randomly
 	 * @param size, the size of the flights list
@@ -80,12 +99,16 @@ public class AirportScreen {
 	 * @throws IOException throw exception if file is not found
 	 */
 	public void generateList(int size) throws IOException{
-		flights.clear();
+		
 		String[] airl = loadArchive(PATH_AIRLINES);
 		String[] dest = loadArchive(PATH_DESTINATIONS);
+		firstFlight = random(1, airl, dest);
 		
-		for (int i = 0; i < size; i++) {
-			flights.add(random(i, airl, dest));
+		for (int i = 2; i <= size; i++) {
+			Flight current = random(i, airl, dest);
+			addFlight(current);
+
+			
 		}
 	}
 	
@@ -111,6 +134,8 @@ public class AirportScreen {
 			return f;
 	
 	}
+
+
 	
 	/**
 	 * This method is responsible for ordering flights by the departure date and departure time. This is the default order
@@ -118,6 +143,7 @@ public class AirportScreen {
 	 * the positions of the items in the list have been changed
 	 */
 	// default.  class Collections.sort comparator
+	/*
 	public void sortingByDateAndTime() {
 		Collections.sort(flights, new FlightDateAndTimeComparator());
 		 
@@ -128,7 +154,7 @@ public class AirportScreen {
 	 * This method is responsible for ordering flights by airline name.
 	 *  <b>post:</b> 
 	 * the positions of the items in the list have been changed
-	 */
+	 
 	// selection
 	public void sortingByAirline() {
 		for (int i = 0; i < flights.size()-1; i++) {
@@ -159,7 +185,7 @@ public class AirportScreen {
 	 * This method is responsible for ordering flights by the flight number.
 	 * <b>post:</b> 
 	 * the positions of the items in the list have been changed
-	 */
+	 
 	// Collections.sort whit comparable
 	public void sortingByFlightNumber() {
 		
@@ -170,7 +196,7 @@ public class AirportScreen {
 	 * This method is responsible for ordering flights by the destination.
 	 * * <b>post:</b> 
 	 * the positions of the items in the list have been changed
-	 */
+	 
 	
 	// insertion
 	public void sortingByDestination() {
@@ -193,7 +219,7 @@ public class AirportScreen {
 	 * This method is responsible for ordering flights by the boarding gate.
 	 * * <b>post:</b> 
 	 * the positions of the items in the list have been changed
-	 */
+	 
 	// bubble
 	public void sortingByBoardingGate() {
 		for (int i = 0; i < flights.size()-1; i++) {
@@ -218,7 +244,7 @@ public class AirportScreen {
 	 * @param month, the flight month
 	 * @param day, the flight day
 	 * @return f, the flight found
-	 */
+	 
 	// Binary search
 	public Flight searchByDate(int year, int month, int day){
 		sortingByDateAndTime();
@@ -257,7 +283,7 @@ public class AirportScreen {
 	 * this method is responsible for finding a flight, according to a given departure time
 	 * @param timeKey, the search criteria
 	 * @return f, the flight found
-	 */
+	 
 	// linear search
 	public Flight searchByTime(String timeKey) {
 		boolean exit = false;
@@ -282,7 +308,7 @@ public class AirportScreen {
 	 * this method is responsible for finding a flight, according to a given airline
 	 * @param airlineKey, the search criteria
 	 * @return f, the flight found
-	 */
+	 
 	
 	// Binary search
 	public Flight searchByAirline(String airlineKey) {
@@ -319,7 +345,7 @@ public class AirportScreen {
 	 * this method is responsible for finding a flight, according to a given destination
 	 * @param destinationKey, the search criteria
 	 * @return f, the flight found
-	 */
+	 
 	public Flight searchByDestination(String destinationKey) {
 		sortingByDestination();
 		
@@ -355,7 +381,7 @@ public class AirportScreen {
 	 * this method is responsible for finding a flight, according to a given boardin gate
 	 * @param gateKey, the search criteria
 	 * @return f, the flight found
-	 */
+	 
 	
 	public Flight searchByGate(int gateKey) {
 		boolean exit = false;
@@ -379,7 +405,7 @@ public class AirportScreen {
 	 * this method is responsible for finding a flight, according to a flightNumber
 	 * @param numberKey, the search criteria
 	 * @return f, the flight found
-	 */
+	 
 	public Flight searchByFlightNumber(String numberKey) {
 		sortingByFlightNumber();
 		
@@ -415,7 +441,7 @@ public class AirportScreen {
 	/**
 	 * this method allows obtain the flights list
 	 * @return flights, the list of the flights
-	 */
+	 
 	public List<Flight> getFlights() {
 		return flights;
 	}
@@ -423,10 +449,27 @@ public class AirportScreen {
 	/**
 	 * this method allows changing the list of flights
 	 * @param fl, the new flights list
-	 */
+	 
 	public void setFlights(List<Flight> fl) {
 		this.flights = fl;
 	}
 
+ */
+	
+	/**
+	 * @return the firstFlight
+	 */
+	public Flight getFirstFlight() {
+		return firstFlight;
+	}
 
+
+	/**
+	 * @param firstFlight the firstFlight to set
+	 */
+	public void setFirstFlight(Flight firstFlight) {
+		this.firstFlight = firstFlight;
+	}
+	
+	
 }
