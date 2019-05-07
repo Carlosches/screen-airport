@@ -305,25 +305,12 @@ public class AirportScreen {
 	 * This method is responsible for ordering flights by the destination.
 	 * * <b>post:</b> 
 	 * the positions of the items in the list have been changed
-	 
+	*/ 
 	
-	// insertion
 	public void sortingByDestination() {
 		
-		for (int i = 0; i < flights.size(); i++) {
-			
-			for (int j = i; j > 0  && flights.get(j-1).getDestination().compareToIgnoreCase(flights.get(j).getDestination()) >0; j-- ) {
-				Flight flJ = flights.get(j);
-				Flight flJ1 = flights.get(j-1);
-				flights.remove(j);
-				flights.remove(j-1);
-				flights.add(j-1, flJ);
-				flights.add(j, flJ1);
-			}
-		}
-		
 	}
-	*/
+	
 	/**
 	 * This method is responsible for ordering flights by the boarding gate.
 	 * * <b>post:</b> 
@@ -377,70 +364,70 @@ public class AirportScreen {
 	 * @param day, the flight day
 	 * @return f, the flight found
 	 */
-	/*public Flight searchByDate(int year, int month, int day){
+	public Flight searchByDate(int year, int month, int day){
+		Flight current = firstFlight;
+		Flight flightFound = null;
+		boolean found = false;
 		
+		while(current != null && !found) {
+			
+			if(current.getDate().equals(new Date(day,month,year))) {
+				found = true;
+				flightFound = current;
+			}
+
+			current = current.getNextFlight();
+		}
 		
+		return flightFound;
 	}
-	/*
+	
 	/**
 	 * this method is responsible for finding a flight, according to a given departure time
 	 * @param timeKey, the search criteria
 	 * @return f, the flight found
-	 
+	 */
 	// linear search
 	public Flight searchByTime(String timeKey) {
-		boolean exit = false;
-		int pos = 0;
-		for (int i = 0; i < flights.size( ) && !exit; i++) {
-			if(flights.get(i).getDepartureTime().equalsIgnoreCase(timeKey)) {
-				pos = i;
-				exit = true;
+		Flight current = firstFlight;
+		Flight flightFound = null;
+		boolean found = false;
+		
+		while(current != null && !found) {
+			
+			if(current.getDepartureTime().equalsIgnoreCase(timeKey)) {
+				found = true;
+				flightFound = current;
 			}
-		}
-		Flight f;
-		if(exit) {
-			f = flights.get(pos);
-		}else {
-			f = null;
 
+			current = current.getNextFlight();
 		}
-		return f;
+		
+		return flightFound;
 	}
 	
 	/**
 	 * this method is responsible for finding a flight, according to a given airline
 	 * @param airlineKey, the search criteria
 	 * @return f, the flight found
-	 
+	 */
 	
-	// Binary search
 	public Flight searchByAirline(String airlineKey) {
-		sortingByAirline();
+		Flight current = firstFlight;
+		Flight flightFound = null;
+		boolean found = false;
 		
-		int low=0;
-		int high = flights.size()-1;
-		
-		int mid = 0;
-		int pos = -1;
-		
-		while(low<=high && pos == -1) {
-			mid = (low+high)/2;
+		while(current != null && !found) {
 			
-			if(flights.get(mid).getAirline().compareToIgnoreCase(airlineKey) <0) {
-				low = mid+1;
-			}else if(flights.get(mid).getAirline().compareToIgnoreCase(airlineKey) >0) {
-				high = mid-1;
-			}else {
-				pos = mid;
+			if(current.getAirline().equalsIgnoreCase(airlineKey)) {
+				found = true;
+				flightFound = current;
 			}
+
+			current = current.getNextFlight();
 		}
-		Flight f;
-		if( pos == -1) {
-			f = null;
-		}else {
-			f = flights.get(pos);
-		}
-		return f;
+		
+		return flightFound;
 		
 	}
 
@@ -448,34 +435,23 @@ public class AirportScreen {
 	 * this method is responsible for finding a flight, according to a given destination
 	 * @param destinationKey, the search criteria
 	 * @return f, the flight found
-	 
+	*/
 	public Flight searchByDestination(String destinationKey) {
-		sortingByDestination();
+		Flight current = firstFlight;
+		Flight flightFound = null;
+		boolean found = false;
 		
-		int low=0;
-		int high = flights.size()-1;
-		
-		int mid = 0;
-		int pos = -1;
-		
-		while(low<=high && pos == -1) {
-			mid = (low+high)/2;
+		while(current != null && !found) {
 			
-			if(flights.get(mid).getDestination().compareToIgnoreCase(destinationKey) <0) {
-				low = mid+1;
-			}else if(flights.get(mid).getDestination().compareToIgnoreCase(destinationKey) >0) {
-				high = mid-1;
-			}else {
-				pos = mid;
+			if(current.getDestination().equalsIgnoreCase(destinationKey)) {
+				found = true;
+				flightFound = current;
 			}
+
+			current = current.getNextFlight();
 		}
-		Flight f;
-		if( pos == -1) {
-			f = null;
-		}else {
-			f = flights.get(pos);
-		}
-		return f;
+		
+		return flightFound;
 		
 	
 	}
@@ -484,80 +460,50 @@ public class AirportScreen {
 	 * this method is responsible for finding a flight, according to a given boardin gate
 	 * @param gateKey, the search criteria
 	 * @return f, the flight found
-	 
+	 */
 	
 	public Flight searchByGate(int gateKey) {
-		boolean exit = false;
-		int pos = 0;
-		for (int i = 0; i < flights.size( ) && !exit; i++) {
-			if(flights.get(i).getBoardingGate() == gateKey) {
-				pos = i;
-				exit = true;
+		Flight current = firstFlight;
+		Flight flightFound = null;
+		boolean found = false;
+		
+		while(current != null && !found) {
+			
+			if(current.getBoardingGate() == gateKey) {
+				found = true;
+				flightFound = current;
 			}
-		}
-		Flight f;
-		if(exit) {
-			f = flights.get(pos);
-		}else {
-			f = null;
 
+			current = current.getNextFlight();
 		}
-		return f;
+		
+		return flightFound;
 	}
 	/**
 	 * this method is responsible for finding a flight, according to a flightNumber
 	 * @param numberKey, the search criteria
 	 * @return f, the flight found
-	 
+	*/ 
 	public Flight searchByFlightNumber(String numberKey) {
-		sortingByFlightNumber();
 		
-		int low=0;
-		int high = flights.size()-1;
+		Flight current = firstFlight;
+		Flight flightFound = null;
+		boolean found = false;
 		
-		int mid = 0;
-		int pos = -1;
-		
-		while(low<=high && pos == -1) {
-			mid = (low+high)/2;
+		while(current != null && !found) {
 			
-			if(flights.get(mid).getFlightNumber().compareToIgnoreCase(numberKey) <0) {
-				low = mid+1;
-			}else if(flights.get(mid).getFlightNumber().compareToIgnoreCase(numberKey) >0) {
-				high = mid-1;
-			}else {
-				pos = mid;
+			if(current.getFlightNumber().equalsIgnoreCase(numberKey)) {
+				found = true;
+				flightFound = current;
 			}
+
+			current = current.getNextFlight();
 		}
-		Flight f;
-		if( pos == -1) {
-			f = null;
-		}else {
-			f = flights.get(pos);
-		}
-		return f;
 		
-		
+		return flightFound;
 	
-	}
-	
-	/**
-	 * this method allows obtain the flights list
-	 * @return flights, the list of the flights
-	 
-	public List<Flight> getFlights() {
-		return flights;
-	}
-	
-	/**
-	 * this method allows changing the list of flights
-	 * @param fl, the new flights list
-	 
-	public void setFlights(List<Flight> fl) {
-		this.flights = fl;
 	}
 
- */
 	
 	/**
 	 * @return the firstFlight

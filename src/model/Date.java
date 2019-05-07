@@ -106,6 +106,23 @@ public class Date implements Comparable<Date>{
 		return comparation;
 	}
 	
+	
+	/* (non-Javadoc)
+	 * @see java.lang.Object#hashCode()
+	 */
+
+
+
+	public boolean equals(Date other) {
+		if (day != other.day)
+			return false;
+		if (month != other.month)
+			return false;
+		if (year != other.year)
+			return false;
+		return true;
+	}
+
 	@Override
 	public String toString() {
 		

@@ -35,7 +35,6 @@ import javafx.stage.Stage;
 import javafx.stage.StageStyle;
 import model.AirportScreen;
 import model.Flight;
-import threads.AirportScreenThread;
 
 
 public class ScreenController {
@@ -218,11 +217,10 @@ public class ScreenController {
 	    		screen.sortingByFlightNumber();
 	    	}
 	    	int size = Integer.parseInt(sizeList.getText());
-	    	List<Flight> lflights = new ArrayList<Flight>();
 	    	showFlights(size);
     	}	
     	time = System.currentTimeMillis()-time;
-    //	alertTime(time/1000);
+    	alertTime(time/1000);
     	
     }
     
@@ -331,7 +329,7 @@ public class ScreenController {
     	backButton.setDisable(false);
     	
     	ObservableList<Flight> lf = FXCollections.observableArrayList();
-    	int counter = 0;
+    	
     	previousFlight = lastFlight;
     
     	Flight current = previousFlight;
@@ -367,7 +365,7 @@ public class ScreenController {
      */
     @FXML
     void searchFlight(ActionEvent event) {
-    	/*
+    	
     	long time = System.currentTimeMillis();
     	if(search.getValue() == null) {
     		labelSearch.setText("choose an option, please");
@@ -378,9 +376,8 @@ public class ScreenController {
     		labelSearch.setVisible(true);
     	}else {
 	    	
-	    	ObservableList<Flight> lf;
+	    	ObservableList<Flight> lf = null;
 	    	
-	    	List<Flight> ls = new ArrayList<Flight>(screen.getFlights());
 	    	String cr = search.getValue();
 	    	try {
 		    	if(cr.equalsIgnoreCase("Date")) {
@@ -407,9 +404,6 @@ public class ScreenController {
 		    		lf = null;
 		    		
 		    	}
-		    	
-		    	screen.setFlights(ls);
-		    	
 		    	
 		    	Stage sta = new Stage();
 		    	
@@ -440,13 +434,12 @@ public class ScreenController {
 	    		labelSearch.setText("enter the value correctly");
 	    	}
     	}
-    	*/
     }
     
     /**
      * this method allows show the time of execution of the a method
      * @param time, the time of the execution
-     
+     */
     public void alertTime(long time) {
     	Alert ale = new Alert(AlertType.INFORMATION);
     	ale.setTitle("Time of excecution");

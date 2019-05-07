@@ -44,24 +44,21 @@ class AirportScreenTest {
 	
 	
 	/**
-	 *  test to verify the correct creation of a AiportScreen object and the correct functioning of trivial methods
+	 *  test to verify the correct creation of a AiportScreen object
 	 */
-	/*@Test
+	@Test
 	void testAirportScreen() {
 		setUpScenary1();
 		
 		airport = new AirportScreen();
 		
 		assertNotNull("the object was not initialized well", airport);
-		assertNotNull("the list is null", airport.getFlights());
-		airport.setFlights(new ArrayList<Flight>());
-		assertNotNull("the list is null", airport.getFlights());
 	}
 	
 	/**
 	 * test to verify the correct reading of text files  
 	 * and to verify if it catches the exception when it should not
-	 
+	*/ 
 	@Test
 	void testLoadArchive() {
 		setUpScenary2();
@@ -78,7 +75,7 @@ class AirportScreenTest {
 	/**
 	 * test to verify the correct reading of text files  
 	 * and to verify if it does not catch the exception when it should
-	 
+	*/ 
 	 
 	@Test
 	void testLoadArchive2() {
@@ -94,14 +91,14 @@ class AirportScreenTest {
 	
 	/**
 	 * test to verify that the list of flights is generated correctly
-	 
+	 */
 	@Test
 	void testGenerateList() {
 		setUpScenary2();
 		
 		try {
 			airport.generateList(15);
-			assertTrue("the list was not generated", airport.getFlights().size() == 15);
+			assertNotNull("the list was not generated", airport.getFirstFlight());
 		}catch(IOException e) {
 			fail("caught the exception when it should not");
 		}
@@ -112,7 +109,7 @@ class AirportScreenTest {
 	/**
 	 * test to verify that flights are generated randomly
 	 *  and to verify if it catches the exception when it should not
-	 
+	*/
 	@Test
 	void testRandom() {
 		setUpScenary2();
@@ -131,7 +128,7 @@ class AirportScreenTest {
 
 	/**
 	 * test to verify that the list is correctly ordered according to the date and time of departure
-	 
+	
 	@Test
 	void testSortingByDateAndTime(){
 		setUpScenary3();
