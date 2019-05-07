@@ -198,7 +198,7 @@ public class Flight implements Comparable<Flight> {
 	/**
 	 *  <b>Description:</b>
 		* allows to change the previous flight of the linked list
-	 * @param nextFlight the prevFlight to set
+	 * @param prevFlight the prevFlight to set
 	 */
 	public void setPrevFlight(Flight prevFlight) {
 		this.prevFlight = prevFlight;
