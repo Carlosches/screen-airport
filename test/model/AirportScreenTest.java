@@ -54,6 +54,27 @@ class AirportScreenTest {
 	}
 	
 	/**
+	 * test to verify that an item is added to the list correctly
+	 */
+	@Test
+	void testAddFlight() {
+		setUpScenary2();
+		
+		Flight newFlight = new Flight("ADA", "ADA1001", "Bogota", new Date(1,2,2018));
+		airport.addFlight(newFlight);
+		
+		Flight current = airport.getFirstFlight();
+		while(current.getNextFlight() != null) {
+			current = current.getNextFlight();
+		}
+		
+		if(current != newFlight) {
+			fail("dodn't add to the element correctly");
+		}
+		
+	}
+	
+	/**
 	 * test to verify the correct reading of text files  
 	 * and to verify if it catches the exception when it should not
 	*/ 

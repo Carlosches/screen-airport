@@ -107,12 +107,11 @@ public class Date implements Comparable<Date>{
 	}
 	
 	
-	/* (non-Javadoc)
-	 * @see java.lang.Object#hashCode()
+	/**
+	 * This method allows you to compare if an object is the same
+	 * @param other the other date object to compare
+	 * @return true if the other object is the same
 	 */
-
-
-
 	public boolean equals(Date other) {
 		if (day != other.day)
 			return false;
@@ -122,7 +121,11 @@ public class Date implements Comparable<Date>{
 			return false;
 		return true;
 	}
-
+	
+	/**
+	 * allows to obtain the attributes of the class in a string
+	 * 
+	 */
 	@Override
 	public String toString() {
 		

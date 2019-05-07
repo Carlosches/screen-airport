@@ -255,7 +255,10 @@ public class ScreenController {
 		}
     	
     }
-	
+	/**
+	 * this method allows you to display the flights in the table view
+	 * @param size the size of the list to show
+	 */
 	public void showFlights(int size) {
 		ObservableList<Flight> flights = FXCollections.observableArrayList();
     	
