@@ -4,9 +4,7 @@ import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertNull;
 import static org.junit.Assert.assertTrue;
 import static org.junit.jupiter.api.Assertions.*;
-
 import java.io.IOException;
-import java.util.ArrayList;
 
 import org.junit.jupiter.api.Test;
 
@@ -128,60 +126,72 @@ class AirportScreenTest {
 
 	/**
 	 * test to verify that the list is correctly ordered according to the date and time of departure
-	
+	*/
 	@Test
 	void testSortingByDateAndTime(){
 		setUpScenary3();
-		
+		FlightDateAndTimeComparator comparator = new FlightDateAndTimeComparator();
 		airport.sortingByDateAndTime();
-		boolean ex = true;
-		for (int i = 0; i < airport.getFlights().size()-1; i++) {
-			if(airport.getFlights().get(i).getDate().compareTo(airport.getFlights().get(i+1).getDate()) > 0) {
-				ex = false;
-			}
-		}
+		Flight current = airport.getFirstFlight();
 		
-		assertTrue("it is not ordered correctly", ex);
+		
+		while(current.getNextFlight() != null) {
+		
+			if(comparator.compare(current,  current.getNextFlight()) >0) {
+				fail("the linked list is not sorted");
+			}
+			
+			current = current.getNextFlight();
+		}
+	
 		
 		
 	}
 	
 	/**
 	 * test to verify that the list is correctly ordered according to the airline
-	 
+	*/
 	@Test
 	void testSortingByAirline(){
 		setUpScenary3();
 		
 		airport.sortingByAirline();
-		boolean ex = true;
-		for (int i = 0; i < airport.getFlights().size()-1; i++) {
-			if(airport.getFlights().get(i).getAirline().compareToIgnoreCase(airport.getFlights().get(i+1).getAirline()) > 0) {
-				ex = false;
-			}
-		}
+		Flight current = airport.getFirstFlight();
+	
+		while(current.getNextFlight() != null) {
 		
-		assertTrue("it is not ordered correctly", ex);
+			if(current.getAirline().compareToIgnoreCase(current.getNextFlight().getAirline()) >0) {
+				fail("the linked list is not sorted");
+			}
+			
+			current = current.getNextFlight();
+		}
+	
+		
 		
 		
 	}
 	
 	/**
 	 * test to verify that the list is correctly ordered according to the flight number
-	 
+	*/ 
 	@Test
 	void testSortingByFlightNumber(){
 		setUpScenary3();
-		
+
 		airport.sortingByFlightNumber();
-		boolean ex = true;
-		for (int i = 0; i < airport.getFlights().size()-1; i++) {
-			if(airport.getFlights().get(i).compareTo(airport.getFlights().get(i+1)) > 0) {
-				ex = false;
-			}
-		}
+		Flight current = airport.getFirstFlight();
+	
+		while(current.getNextFlight() != null) {
 		
-		assertTrue("it is not ordered correctly", ex);
+			if(current.compareTo(current.getNextFlight()) >0) {
+				fail("the linked list is not sorted");
+			}
+			
+			current = current.getNextFlight();
+		}
+	
+		
 		
 		
 	}
@@ -189,54 +199,58 @@ class AirportScreenTest {
 	
 	/**
 	 * test to verify that the list is correctly ordered according to the destination
-	 
+	*/ 
 	@Test
 	void testSortingByDestination(){
 		setUpScenary3();
 		
 		airport.sortingByDestination();
-		boolean ex = true;
-		for (int i = 0; i < airport.getFlights().size()-1; i++) {
-			if(airport.getFlights().get(i).getDestination().compareToIgnoreCase(airport.getFlights().get(i+1).getDestination()) > 0) {
-				ex = false;
+		Flight current = airport.getFirstFlight();
+	
+		while(current.getNextFlight() != null) {
+		
+			if(current.getDestination().compareToIgnoreCase(current.getNextFlight().getDestination()) >0) {
+				fail("the linked list is not sorted");
 			}
+			
+			current = current.getNextFlight();
 		}
-		
-		assertTrue("it is not ordered correctly", ex);
-		
-		
+
 	}
 	
 	/**
 	 * test to verify that the list is correctly ordered according to the boarding gate
-	 
+	 */
 	@Test
 	void testSortingByBoardingGate(){
 		setUpScenary3();
-		
+
 		airport.sortingByBoardingGate();
-		boolean ex = true;
-		for (int i = 0; i < airport.getFlights().size()-1; i++) {
-			if(airport.getFlights().get(i).getBoardingGate() > airport.getFlights().get(i+1).getBoardingGate() ) {
-				ex = false;
-			}
-		}
+		Flight current = airport.getFirstFlight();
+	
+		while(current.getNextFlight() != null) {
 		
-		assertTrue("it is not ordered correctly", ex);
+			if(current.getBoardingGate() > current.getNextFlight().getBoardingGate()) {
+				fail("the linked list is not sorted");
+			}
+			
+			current = current.getNextFlight();
+		}
+	
 		
 		
 	}
 	
 	/**
 	 * test to verify that the searched flight is found correctly by date
-	 
+	*/ 
 	@Test
 	void testSearchByDate() {
 		setUpScenary3();
 		
-		int day = airport.getFlights().get(0).getDate().getDay();
-		int month = airport.getFlights().get(0).getDate().getMonth();
-		int year = airport.getFlights().get(0).getDate().getYear();
+		int day = airport.getFirstFlight().getDate().getDay();
+		int month = airport.getFirstFlight().getDate().getMonth();
+		int year = airport.getFirstFlight().getDate().getYear();
 		
 		Flight f =airport.searchByDate(year, month, day);
 		
@@ -252,12 +266,12 @@ class AirportScreenTest {
 	
 	/**
 	 * test to verify that the searched flight is found correctly by time
-	 
+	*/
 	@Test
 	void testSearchByTime() {
 		setUpScenary3();
 		
-		String n = airport.getFlights().get(13).getDepartureTime();
+		String n = airport.getFirstFlight().getDepartureTime();
 		
 		Flight f =airport.searchByTime(n);
 		
@@ -272,12 +286,12 @@ class AirportScreenTest {
 	
 	/**
 	 * test to verify that the searched flight is found correctly by airline
-	 
+	 */
 	@Test
 	void testSearchByAirline() {
 		setUpScenary3();
 		
-		String n = airport.getFlights().get(13).getAirline();
+		String n = airport.getFirstFlight().getAirline();
 		
 		Flight f =airport.searchByAirline(n);
 		
@@ -293,12 +307,12 @@ class AirportScreenTest {
 	
 	/**
 	 * test to verify that the searched flight is found correctly by destination
-	 
+	 */
 	@Test
 	void testSearchByDestination() {
 		setUpScenary3();
 		
-		String n = airport.getFlights().get(13).getDestination();
+		String n = airport.getFirstFlight().getDestination();
 		
 		Flight f =airport.searchByDestination(n);
 		
@@ -314,12 +328,12 @@ class AirportScreenTest {
 	}
 	/**
 	 * test to verify that the searched flight is found correctly by boarding gate
-	 
+	*/ 
 	@Test
 	void testSearchByGate() {
 		setUpScenary3();
 		
-		int n = airport.getFlights().get(13).getBoardingGate();
+		int n = airport.getFirstFlight().getBoardingGate();
 		
 		Flight f =airport.searchByGate(n);
 		
@@ -335,12 +349,12 @@ class AirportScreenTest {
 	
 	/**
 	 * test to verify that the searched flight is found correctly by flight number
-	
+	*/
 	@Test
 	void testSearchByFlightNumber() {
 		setUpScenary3();
 		
-		String n = airport.getFlights().get(13).getFlightNumber();
+		String n = airport.getFirstFlight().getFlightNumber();
 		
 		Flight f =airport.searchByFlightNumber(n);
 		
@@ -352,7 +366,7 @@ class AirportScreenTest {
 		assertTrue("did not find the object", f.getFlightNumber().equals(n));
 		
 		
-	}*/
+	}
 	
 	
 }

@@ -252,9 +252,6 @@ public class AirportScreen {
 		
 		}
 		
-	
-	
-		
 	}
 	
 	/**
@@ -306,8 +303,32 @@ public class AirportScreen {
 	 * * <b>post:</b> 
 	 * the positions of the items in the list have been changed
 	*/ 
+	// insertion
 	
 	public void sortingByDestination() {
+		Flight oCurr = firstFlight.getNextFlight();
+		while(oCurr != null) {
+			Flight curr = oCurr;
+			while(curr.getPrevFlight()!=null) {
+				if(curr.getDestination().compareToIgnoreCase(curr.getPrevFlight().getDestination()) <0) {
+					Flight temp = curr.getPrevFlight();
+					if(temp.getPrevFlight() != null) {
+                        temp.getPrevFlight().setNextFlight(curr);
+                    }
+                    if(curr.getNextFlight() != null) {
+                        curr.getNextFlight().setPrevFlight(temp);
+                    }
+                    temp.setNextFlight(curr.getNextFlight());
+                    curr.setPrevFlight(temp.getPrevFlight());
+                    temp.setPrevFlight(curr);
+                    curr.setNextFlight(temp);
+                    if(temp == firstFlight)
+                        firstFlight = curr;
+				}else
+				curr = curr.getPrevFlight();
+			}
+			oCurr = oCurr.getNextFlight();
+		}
 		
 	}
 	

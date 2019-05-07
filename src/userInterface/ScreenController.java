@@ -8,13 +8,8 @@
 package userInterface;
 
 import java.io.IOException;
-import java.util.ArrayList;
-import java.util.List;
 import java.util.NoSuchElementException;
 import java.util.StringTokenizer;
-
-import org.omg.CORBA.Current;
-
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
@@ -215,6 +210,10 @@ public class ScreenController {
 	    		screen.sortingByAirline();
 	    	}else if(value.equalsIgnoreCase("flight number")) {
 	    		screen.sortingByFlightNumber();
+	    	}else if(value.equalsIgnoreCase("Destination")) {
+	    		screen.sortingByDestination();
+	    	}else if(value.equalsIgnoreCase("Default (Date and departure time)")) {
+	    		screen.sortingByDateAndTime();
 	    	}
 	    	int size = Integer.parseInt(sizeList.getText());
 	    	showFlights(size);
