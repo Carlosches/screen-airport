@@ -20,7 +20,7 @@ import java.util.List;
 public class AirportScreen {
 
 	/**
-	 * List that represents the flights of the airport
+	 * object that represents the first element of the linked list
 	 */
 	private Flight firstFlight;
 	
@@ -37,14 +37,11 @@ public class AirportScreen {
 	
 	/**
 	 * initialize a new AiportScreen object
-	 * <b>post:</b> 
-	 * the list flights has been initialize
 	 */
 	
 	public AirportScreen() {
 		
 	}
-	
 	
 	/**
 	 * this method is responsible for reading a text file to generate random lists
@@ -73,7 +70,13 @@ public class AirportScreen {
 		return array;
 	}
 	
-	
+	/**
+	 * This function allows to add a new flight to the linked list
+	 * @param newFlight the new flight to add
+	 * <b>post:</b> 
+	 * items have been added to the list flights
+	 * 
+	 */
 	public void addFlight(Flight newFlight) {
 		
 		if(firstFlight != null) {
@@ -142,11 +145,46 @@ public class AirportScreen {
 	 * * <b>post:</b> 
 	 * the positions of the items in the list have been changed
 	 */
-	// default.  class Collections.sort comparator
-	/*
+
+	
 	public void sortingByDateAndTime() {
-		Collections.sort(flights, new FlightDateAndTimeComparator());
-		 
+		FlightDateAndTimeComparator comparator = new FlightDateAndTimeComparator();
+		boolean changed = true;
+		while(changed) {
+			Flight currentNode = firstFlight;
+			changed = false;
+			
+			while(currentNode.getNextFlight() != null) {
+				
+				if(comparator.compare(currentNode, currentNode.getNextFlight()) >0) {
+					changed = true;
+					Flight less = currentNode.getNextFlight();
+					
+					if(currentNode.getPrevFlight() != null) {
+						currentNode.getPrevFlight().setNextFlight(less);
+					}
+					if(less.getNextFlight() != null) {
+						less.getNextFlight().setPrevFlight(currentNode);
+					}
+					
+					currentNode.setNextFlight(less.getNextFlight());
+					less.setPrevFlight(currentNode.getPrevFlight());
+					currentNode.setPrevFlight(less);
+					less.setNextFlight(currentNode);
+					
+					if(currentNode == firstFlight) {
+						firstFlight = less;
+					}
+		
+					
+				}else {
+					currentNode = currentNode.getNextFlight();
+				}
+
+			}
+			
+		}
+
 	}
 	
 	
@@ -154,30 +192,68 @@ public class AirportScreen {
 	 * This method is responsible for ordering flights by airline name.
 	 *  <b>post:</b> 
 	 * the positions of the items in the list have been changed
-	 
+	 */
 	// selection
 	public void sortingByAirline() {
-		for (int i = 0; i < flights.size()-1; i++) {
+		
+		Flight auxNode = firstFlight;
+		
+		
+		while(auxNode != null) {
+		
+			Flight currentNode = auxNode;
+			Flight nextNode = auxNode.getNextFlight();
 			
-			int min = i;
-			boolean e = false;
-			for (int j = i+1; j < flights.size() ; j++) {
-				
-				if( flights.get(j).getAirline().compareToIgnoreCase(flights.get(min).getAirline()) < 0) {
-					min = j;
-					e = true;
+			boolean enter = false;
+
+			while(nextNode != null) {
+				if(currentNode.getAirline().compareToIgnoreCase(nextNode.getAirline())>0) {
+					Flight next = nextNode.getNextFlight();
+					currentNode = nextNode;
+					nextNode =next;
+					enter = true;
+				}else {
+					nextNode = nextNode.getNextFlight();
 				}
 			}
-			if(e) {
-				Flight flJ = flights.get(min);
-				Flight flJ1 = flights.get(i);
-				flights.remove(min);
-				flights.remove(i);
-				flights.add(i, flJ);
-				flights.add(min, flJ1);
+			
+			if(enter) {
+				if(auxNode.getPrevFlight() != null) {
+					auxNode.getPrevFlight().setNextFlight(currentNode);
+				}
+				if(currentNode.getNextFlight() != null) {
+					currentNode.getNextFlight().setPrevFlight(auxNode);
+				}
+				
+				if(currentNode == auxNode.getNextFlight()) {
+					auxNode.setNextFlight(currentNode.getNextFlight());
+					currentNode.setPrevFlight(auxNode.getPrevFlight());
+					auxNode.setPrevFlight(currentNode);
+					currentNode.setNextFlight(auxNode);
+				}else {
+					Flight auxNext = auxNode.getNextFlight();
+					auxNode.setNextFlight(currentNode.getNextFlight());
+					Flight currentprev =currentNode.getPrevFlight();
+					currentNode.setPrevFlight(auxNode.getPrevFlight());
+					auxNode.setPrevFlight(currentprev);
+					currentNode.setNextFlight(auxNext);
+					auxNext.setPrevFlight(currentNode);
+					currentprev.setNextFlight(auxNode);
+					
+
+				}
+				if(auxNode == firstFlight) {
+					firstFlight = currentNode;
+				}
+				auxNode = currentNode.getNextFlight();
+			}else {
+				auxNode = auxNode.getNextFlight();
 			}
+		
 		}
 		
+	
+	
 		
 	}
 	
@@ -185,11 +261,44 @@ public class AirportScreen {
 	 * This method is responsible for ordering flights by the flight number.
 	 * <b>post:</b> 
 	 * the positions of the items in the list have been changed
-	 
-	// Collections.sort whit comparable
+	 */
 	public void sortingByFlightNumber() {
+		boolean changed = true;
+		while(changed) {
+			Flight currentNode = firstFlight;
+			changed = false;
+			
+			while(currentNode.getNextFlight() != null) {
+				
+				if(currentNode.compareTo(currentNode.getNextFlight()) >0) {
+					changed = true;
+					Flight less = currentNode.getNextFlight();
+					
+					if(currentNode.getPrevFlight() != null) {
+						currentNode.getPrevFlight().setNextFlight(less);
+					}
+					if(less.getNextFlight() != null) {
+						less.getNextFlight().setPrevFlight(currentNode);
+					}
+					
+					currentNode.setNextFlight(less.getNextFlight());
+					less.setPrevFlight(currentNode.getPrevFlight());
+					currentNode.setPrevFlight(less);
+					less.setNextFlight(currentNode);
+					
+					if(currentNode == firstFlight) {
+						firstFlight = less;
+					}
 		
-		Collections.sort(flights);
+					
+				}else {
+					currentNode = currentNode.getNextFlight();
+				}
+
+			}
+			
+		}
+
 	}
 	
 	/**
@@ -214,28 +323,51 @@ public class AirportScreen {
 		}
 		
 	}
-	
+	*/
 	/**
 	 * This method is responsible for ordering flights by the boarding gate.
 	 * * <b>post:</b> 
 	 * the positions of the items in the list have been changed
-	 
+	*/ 
 	// bubble
 	public void sortingByBoardingGate() {
-		for (int i = 0; i < flights.size()-1; i++) {
-			for (int j = 0; j < flights.size()-1-i; j++) {
-				if(flights.get(j).getBoardingGate() > flights.get(j+1).getBoardingGate()) {
-					Flight flJ = flights.get(j);
-					Flight flJ1 = flights.get(j+1);
-					flights.remove(j);
-					flights.remove(j);
-					flights.add(j, flJ1);
-					flights.add(j+1, flJ);
-					
-				}
+		
+		boolean changed = true;
+		while(changed) {
+			Flight currentNode = firstFlight;
+			changed = false;
+			
+			while(currentNode.getNextFlight() != null) {
 				
+				if(currentNode.getBoardingGate() > currentNode.getNextFlight().getBoardingGate()) {
+					changed = true;
+					Flight less = currentNode.getNextFlight();
+					
+					if(currentNode.getPrevFlight() != null) {
+						currentNode.getPrevFlight().setNextFlight(less);
+					}
+					if(less.getNextFlight() != null) {
+						less.getNextFlight().setPrevFlight(currentNode);
+					}
+					
+					currentNode.setNextFlight(less.getNextFlight());
+					less.setPrevFlight(currentNode.getPrevFlight());
+					currentNode.setPrevFlight(less);
+					less.setNextFlight(currentNode);
+					
+					if(currentNode == firstFlight) {
+						firstFlight = less;
+					}
+		
+					
+				}else {
+					currentNode = currentNode.getNextFlight();
+				}
+
 			}
+			
 		}
+
 	}
 	
 	/**
@@ -244,41 +376,12 @@ public class AirportScreen {
 	 * @param month, the flight month
 	 * @param day, the flight day
 	 * @return f, the flight found
-	 
-	// Binary search
-	public Flight searchByDate(int year, int month, int day){
-		sortingByDateAndTime();
+	 */
+	/*public Flight searchByDate(int year, int month, int day){
 		
-		Date key = new Date(day, month, year);
-		int low=0;
-		int high = flights.size()-1;
-		
-		int mid = 0;
-		int pos = -1;
-		
-		while(low<=high && pos == -1) {
-			mid = (low+high)/2;
-			
-			if(flights.get(mid).getDate().compareTo(key) <0) {
-				low = mid+1;
-			}else if(flights.get(mid).getDate().compareTo(key) >0) {
-				high = mid-1;
-			}else {
-				pos = mid;
-			}
-			
-			
-		}
-		Flight f;
-		if( pos == -1) {
-			f = null;
-		}else {
-			f = flights.get(pos);
-		}
-		return f;
 		
 	}
-	
+	/*
 	/**
 	 * this method is responsible for finding a flight, according to a given departure time
 	 * @param timeKey, the search criteria

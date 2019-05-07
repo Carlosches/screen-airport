@@ -202,39 +202,28 @@ public class ScreenController {
 	 */
     @FXML
     void sort(ActionEvent event) {
-    	/*
+    	
     	long time = System.currentTimeMillis();
     	if(criteria.getValue() == null) {
     		labelSorting.setText("Choose an option, please");
     		labelSorting.setVisible(true);
     	}else {
 	    	String value = criteria.getValue();
-	 
-			
-	    	AirportScreenThread tt = new AirportScreenThread(screen, value, 0);
-	    	tt.start();
-	    	try {
-				tt.join();
-			} catch (InterruptedException e) {
-				e.printStackTrace();
-			}
-	    	List<Flight> lflights = new ArrayList<Flight>();
-	    	if(screen.getFlights().size() > 13) {
-	    		previousFlight = 13;
-	    		previousList(null);
 	    	
-	    	}else {
-	    		for (int i = 0; i < screen.getFlights().size(); i++) {
-					lflights.add(screen.getFlights().get(i));
-				}
-	    		ObservableList<Flight> fls = FXCollections.observableArrayList(lflights);
-	        	listFlights.setItems(fls);
-	
+	    	if(value.equalsIgnoreCase("gate")) {
+	    		screen.sortingByBoardingGate();
+	    	}else if(value.equalsIgnoreCase("airline")) {
+	    		screen.sortingByAirline();
+	    	}else if(value.equalsIgnoreCase("flight number")) {
+	    		screen.sortingByFlightNumber();
 	    	}
+	    	int size = Integer.parseInt(sizeList.getText());
+	    	List<Flight> lflights = new ArrayList<Flight>();
+	    	showFlights(size);
     	}	
     	time = System.currentTimeMillis()-time;
-    	alertTime(time/1000);
-    	*/
+    //	alertTime(time/1000);
+    	
     }
     
    /**
@@ -261,35 +250,39 @@ public class ScreenController {
 					
 					e1.printStackTrace();
 				}
-		
-		    	ObservableList<Flight> flights = FXCollections.observableArrayList();
-		    	
-		    	if(size > 13) {
-		    		Flight current = screen.getFirstFlight();
-		    		flights.add(current);
-		    		nextButton.setDisable(false);
-		    		for (int i = 1; i < 13; i++) {
-		    			current = current.getNextFlight();
-		    			flights.add(current);
-					}
-		    		lastFlight = current;
-		    		previousFlight = screen.getFirstFlight();
-		    	}else {
-		    		Flight current = screen.getFirstFlight();
-		    		nextButton.setDisable(true);
-		    		for (int i = 0; i < size; i++) {
-		    			flights.add(current);
-		    			current = current.getNextFlight();
-					}
-		    	}
-	
-		    	listFlights.setItems(flights);
+		    	screen.sortingByDateAndTime();
+		    	showFlights(size);
 			}catch(NumberFormatException e) {
 				labelGenerate.setText("Enter a integer number");
 			}
 		}
     	
     }
+	
+	public void showFlights(int size) {
+		ObservableList<Flight> flights = FXCollections.observableArrayList();
+    	
+    	if(size > 13) {
+    		Flight current = screen.getFirstFlight();
+    		flights.add(current);
+    		nextButton.setDisable(false);
+    		for (int i = 1; i < 13; i++) {
+    			current = current.getNextFlight();
+    			flights.add(current);
+			}
+    		lastFlight = current;
+    		previousFlight = screen.getFirstFlight();
+    	}else {
+    		Flight current = screen.getFirstFlight();
+    		nextButton.setDisable(true);
+    		for (int i = 0; i < size; i++) {
+    			flights.add(current);
+    			current = current.getNextFlight();
+			}
+    	}
+
+    	listFlights.setItems(flights);
+	}
     
     /**
      * this method allows see the previous page of the flights list
